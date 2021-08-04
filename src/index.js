@@ -11,5 +11,9 @@ export default new Phaser.Game({
   backgroundColor: "#4488aa",
   physics: {
     default: "arcade",
+    arcade: {
+      gravity: { y: 300 },
+      debug: false,
+    },
   },
 });

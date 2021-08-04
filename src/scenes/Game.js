@@ -1,9 +1,10 @@
 import Phaser from "phaser";
 import platform from "../assets/platform.png";
 import dude from "../assets/dude.png";
-import { gameOptions } from "../gameOptions.js";
+import { gameOptions, gameConfig } from "../gameOptions.js";
 
 class Game extends Phaser.Scene {
+  platformPool;
   constructor() {
     super("game");
   }
@@ -13,12 +14,21 @@ class Game extends Phaser.Scene {
   }
   create() {
     this.platformGroup = this.add.group({
-      removeCallback: (platform) => this.platformPool.add(platform),
+      // once a platform is removed, it's added to the pool
+      removeCallback: function (platform) {
+        platform.scene.platformPool.add(platform);
+      },
     });
-    this.platformpool = this.add.group({
-      removeCallback: (platform) => this.platformGroup.add(platform),
+
+    // pool
+    this.platformPool = this.add.group({
+      // once a platform is removed from the pool, it's added to the active platforms group
+      removeCallback: function (platform) {
+        platform.scene.platformGroup.add(platform);
+      },
     });
     this.playerJumps = 0;
+    this.addPlatform(gameConfig.width, gameConfig.width / 2);
   }
 
   addPlatform(platformWidth, posX) {
@@ -32,7 +42,7 @@ class Game extends Phaser.Scene {
     } else {
       platform = this.physics.add.sprite(
         posX,
-        game.config.height * 0.8,
+        gameConfig.height * 0.8,
         "platform"
       );
       platform.setImmovable(true);

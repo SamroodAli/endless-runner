@@ -11,8 +11,15 @@ class Game extends Phaser.Scene {
     this.load.spritesheet("dude", dude, { frameWidth: 32, frameHeight: 48 });
   }
   create() {
-    this.add.image(200, 320, "platform");
-    this.player = this.physics.add.sprite(100, 450, "dude");
+    // this.platform = this.physics.add.staticImage(200, 320, "platform");
+    // this.player = this.physics.add.sprite(100, 0, "dude");
+    // this.physics.add.collider(this.player, this.platform);
+    this.platformGroup = this.add.group({
+      removeCallback: (platform) => this.platformPool.add(platform),
+    });
+    this.platformpool = this.add.group({
+      removeCallback: (platform) => this.platformGroup.add(platform),
+    });
   }
 }
 export default Game;

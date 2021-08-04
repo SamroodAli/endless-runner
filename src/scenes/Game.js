@@ -5,8 +5,10 @@ class Game extends Phaser.Scene {
     super("game");
   }
   preload() {
-    this.load.image("platform", GroundGrass);
+    this.load.image("platform", platform);
   }
-  create() {}
+  create() {
+    this.add.image(200, 320, "platform").setScaleX(2).setScaleY(0.5);
+  }
 }
 export default Game;

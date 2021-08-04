@@ -5,8 +5,8 @@ import gameOptions from "./gameOptions.js";
 
 export default new Phaser.Game({
   type: Phaser.AUTO,
-  width: 400,
-  height: 640,
+  width: screen.width,
+  height: screen.height,
   scene: Game,
   backgroundColor: "#4488aa",
   physics: {

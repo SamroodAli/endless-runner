@@ -1,15 +1,14 @@
 const path = require("path");
 const Dotenv = require("dotenv-webpack");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
-const webpack = require("webpack")
+const webpack = require("webpack");
 
 module.exports = {
   entry: "./src/index.js",
   mode: "development",
   devServer: {
-    contentBase: "./dist",
     hot: true,
-    port: "3000",
+    port: "5500",
   },
   output: {
     filename: "main.js",

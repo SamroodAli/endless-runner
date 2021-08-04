@@ -36,6 +36,7 @@ class Game extends Phaser.Scene {
     );
     this.player.setGravityY(gameOptions.playerGravity);
     this.physics.add.collider(this.player, this.platformGroup);
+    this.input.on("pointerdown", this.jump, this);
   }
 
   addPlatform(platformWidth, posX) {
@@ -61,6 +62,18 @@ class Game extends Phaser.Scene {
       gameOptions.spawnRange[0],
       gameOptions.spawnRange[1]
     );
+  }
+  jump() {
+    if (
+      this.player.body.touching.down ||
+      (this.playerJumps > 0 && this.playerJumps < gameOptions.jumps)
+    ) {
+      if (this.player.body.touching.down) {
+        this.playerJumps = 0;
+      }
+      this.player.setVelocityY(gameOptions.jumpForce * -1);
+      this.playerJumps++;
+    }
   }
 }
 export default Game;

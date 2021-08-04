@@ -38,6 +38,22 @@ class Game extends Phaser.Scene {
     this.physics.add.collider(this.player, this.platformGroup);
     this.input.on("pointerdown", this.jump, this);
   }
+  update() {
+    // game over
+    if (this.player.y > gameConfig.height) {
+      this.add.text(
+        gameConfig.width / 2.5,
+        gameConfig.height / 4,
+        "Game Over",
+        {
+          fill: "#000",
+          fontSize: "40px",
+          alignSelf: "center",
+        }
+      );
+    }
+    this.player.x = gameOptions.playerStartPosition;
+  }
 
   addPlatform(platformWidth, posX) {
     let platform;

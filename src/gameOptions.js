@@ -12,8 +12,8 @@ export const gameOptions = {
 
 export let gameConfig = {
   type: Phaser.AUTO,
-  width: screen.width,
-  height: screen.height,
+  width: screen.width * 0.9,
+  height: screen.height * 0.9,
   scene: Game,
   backgroundColor: "#4488aa",
 

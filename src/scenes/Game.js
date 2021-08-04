@@ -34,6 +34,8 @@ class Game extends Phaser.Scene {
       gameConfig.height / 2,
       "dude"
     );
+    this.player.setGravityY(gameOptions.playerGravity);
+    this.physics.add.collider(this.player, this.platformGroup);
   }
 
   addPlatform(platformWidth, posX) {
@@ -47,7 +49,7 @@ class Game extends Phaser.Scene {
     } else {
       platform = this.physics.add.sprite(
         posX,
-        gameConfig.height * 0.8,
+        gameConfig.height * 0.7,
         "platform"
       );
       platform.setImmovable(true);

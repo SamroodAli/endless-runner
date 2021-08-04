@@ -29,6 +29,11 @@ class Game extends Phaser.Scene {
     });
     this.playerJumps = 0;
     this.addPlatform(gameConfig.width, gameConfig.width / 2);
+    this.player = this.physics.add.sprite(
+      gameOptions.playerStartPosition,
+      gameConfig.height / 2,
+      "dude"
+    );
   }
 
   addPlatform(platformWidth, posX) {

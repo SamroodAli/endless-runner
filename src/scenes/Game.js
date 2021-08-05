@@ -28,7 +28,11 @@ class Game extends Phaser.Scene {
       },
     });
     this.playerJumps = 0;
-    this.addPlatform(gameConfig.width, gameConfig.width / 2);
+    this.addPlatform(
+      gameConfig.width,
+      gameConfig.width / 2,
+      gameConfig.height * 0.8
+    );
     this.player = this.physics.add.sprite(
       gameOptions.playerStartPosition,
       gameConfig.height / 2,
@@ -69,10 +73,12 @@ class Game extends Phaser.Scene {
 
     // recycling platforms
     let minDistance = gameConfig.width; //screen Width
+    let lastPlatformHeight = 0;
     this.platformGroup.getChildren().forEach((platform) => {
       let platformDistance =
         gameConfig.width - (platform.x + platform.displayWidth / 2); //1050
       minDistance = Math.min(minDistance, platformDistance); // 1050
+      lastPlatformHeight = platform.y;
       if (platform.x < -platform.displayWidth / 2) {
         this.platformGroup.killAndHide(platform);
         this.platformGroup.remove(platform);
@@ -80,13 +86,27 @@ class Game extends Phaser.Scene {
     }, this);
     // adding new platforms
     if (minDistance > this.nextPlatformDistance) {
-      var nextPlatformWidth = Phaser.Math.Between(
+      const nextPlatformWidth = Phaser.Math.Between(
         gameOptions.platformSizeRange[0],
         gameOptions.platformSizeRange[1]
       );
+      const platformRandomHeight = Phaser.Math.Between(
+        ...gameOptions.platformHeightRange
+      );
+      const nextPlatformGap = lastPlatformHeight + platformRandomHeight;
+      const minPlatformHeight =
+        gameConfig.height * gameOptions.platformVerticalLimit[0];
+      const maxPlatformHeight =
+        gameConfig.height * gameOptions.platformVerticalLimit[1];
+      const nextPlatformHeight = Phaser.Math.Clamp(
+        nextPlatformGap,
+        minPlatformHeight,
+        maxPlatformHeight
+      );
       this.addPlatform(
         nextPlatformWidth,
-        gameConfig.width + nextPlatformWidth / 2
+        gameConfig.width + nextPlatformWidth / 2,
+        nextPlatformHeight
       );
     }
     if (this.player.body.touching.down) {

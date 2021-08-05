@@ -7,13 +7,17 @@ export const gameOptions = {
   playerGravity: 900,
   jumpForce: 400,
   playerStartPosition: 200,
+  platformHeightRange: [-10, 10],
+  platformHeightScale: 10,
+  platformVerticalLimit: [0.4, 0.8],
   jumps: 2,
+  jumpForce: 400,
 };
 
 export let gameConfig = {
   type: Phaser.AUTO,
-  width: screen.width * 0.9,
-  height: screen.height * 0.9,
+  width: 1334,
+  height: 750,
   scene: Game,
   backgroundColor: "#4488aa",
 

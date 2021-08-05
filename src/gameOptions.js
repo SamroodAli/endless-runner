@@ -1,7 +1,7 @@
 import Game from "./scenes/Game.js";
 
 export const gameOptions = {
-  platformStartSpeed: 350,
+  platformSpeedRange: 350,
   spawnRange: [100, 300],
   platformSizeRange: [50, 250],
   playerGravity: 900,

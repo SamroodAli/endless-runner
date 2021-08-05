@@ -42,10 +42,9 @@ class Game extends Phaser.Scene {
     });
     this.anims.create({
       key: "turn",
-      frames: [{ key: "dude", frame: 7 }],
+      frames: [{ key: "dude", frame: 6 }],
       frameRate: 20,
     });
-    this.player.anims.play("turn", true);
 
     this.player.setGravityY(gameOptions.playerGravity);
     this.physics.add.collider(this.player, this.platformGroup);
@@ -94,34 +93,30 @@ class Game extends Phaser.Scene {
       this.player.anims.play("run", true);
       this.playerJumps = 0;
     } else {
-      this.player.anims.play("");
+      this.player.anims.play("turn", true);
     }
   }
 
-  addPlatform(platformWidth, posX) {
+  addPlatform(platformWidth, posX, posY) {
     //add from the pool if available or else create a platform and add it to the group
     let platform;
     if (this.platformPool.getLength()) {
       platform = this.platformPool.getFirst();
       platform.x = posX;
+      platform.y = posY;
       platform.active = true;
       platform.visible = true;
       this.platformPool.remove(platform);
     } else {
-      platform = this.physics.add.image(
-        posX,
-        gameConfig.height * 0.7,
-        "platform"
-      );
+      platform = this.physics.add.image(posX, posY, "platform");
       platform.setImmovable(true);
-      platform.setVelocityX(gameOptions.platformStartSpeed * -1);
+      platform.setVelocityX(
+        Phaser.Math.Between(...gameOptions.platformSpeedRange) * -1
+      );
       this.platformGroup.add(platform);
     }
     platform.displayWidth = platformWidth;
-    this.nextPlatformDistance = Phaser.Math.Between(
-      gameOptions.spawnRange[0],
-      gameOptions.spawnRange[1]
-    );
+    this.nextPlatformDistance = Phaser.Math.Between(...gameOptions.spawnRange);
   }
   jump() {
     if (this.playerJumps < gameOptions.jumps) {

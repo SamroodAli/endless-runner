@@ -52,6 +52,7 @@ class Game extends Phaser.Scene {
           alignSelf: "center",
         }
       );
+      this.physics.pause();
     }
     this.player.x = gameOptions.playerStartPosition;
 

@@ -66,7 +66,13 @@ class Game extends Phaser.Scene {
       null,
       this
     );
-
+    this.physics.add.collider(
+      this.player,
+      this.coinGroup,
+      this.collectCoin,
+      null,
+      this
+    );
     this.input.on("pointerdown", this.jump, this);
   }
   update() {

@@ -8,9 +8,17 @@ class PreloadGame extends Phaser.Scene {
   constructor() {
     super("preloadGame");
   }
-  preload() {}
-  create() {
+  preload() {
+    this.load.image("platform", platform);
+
+    this.load.spritesheet("dude", dude, {
+      frameWidth: 24,
+      frameHeight: 48,
+    });
+
+    this.load.spritesheet();
   }
+  create() {}
   update() {}
 }
 export default Preload;

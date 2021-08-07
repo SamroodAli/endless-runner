@@ -10,6 +10,7 @@ class Game extends Phaser.Scene {
   }
 
   create() {
+    this.addedPlatforms = 0;
     this.platformGroup = this.add.group({
       // once a platform is removed, it's added to the pool
       removeCallback: (platform) => {
@@ -24,11 +25,17 @@ class Game extends Phaser.Scene {
         this.platformGroup.add(platform);
       },
     });
+    this.coinGroup = this.add.group({
+      removeCallback: (coin) => this.coinPool.add(coin),
+    });
+    this.coinPool = this.add.group({
+      removeCallback: (coin) => this.coinGroup.add(coin),
+    });
     this.playerJumps = 0;
     this.addPlatform(
       gameConfig.width,
       gameConfig.width / 2,
-      gameConfig.height * 0.8
+      gameConfig.height * gameOptions.platformVerticalLimit[0]
     );
     this.player = this.physics.add.sprite(
       gameOptions.playerStartPosition,

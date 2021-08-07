@@ -2,16 +2,16 @@ import Game from "./scenes/Game.js";
 
 export const gameOptions = {
   platformSpeedRange: [300, 400],
-  spawnRange: [100, 300],
-  platformSizeRange: [50, 250],
+  spawnRange: [80, 300],
+  platformSizeRange: [90, 300],
+  platformHeightRange: [-5, 5],
+  platformHeightScale: 20,
+  platformVerticalLimit: [0.4, 0.7],
   playerGravity: 900,
   jumpForce: 400,
   playerStartPosition: 200,
-  platformHeightRange: [-10, 10],
-  platformHeightScale: 10,
-  platformVerticalLimit: [0.4, 0.7],
   jumps: 2,
-  jumpForce: 400,
+  coinPercent: 25,
 };
 
 export let gameConfig = {

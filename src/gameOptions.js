@@ -1,4 +1,5 @@
-import Game from "./scenes/Game.js";
+import Preload from "./scenes/preload.js";
+import Game from "./scenes/game.js";
 
 export const gameOptions = {
   platformSpeedRange: [300, 400],
@@ -18,7 +19,7 @@ export let gameConfig = {
   type: Phaser.AUTO,
   width: screen.availWidth * 0.9,
   height: screen.availHeight * 0.8,
-  scene: Game,
+  scene: [Preload, Game],
   backgroundColor: "#4488aa",
 
   physics: {

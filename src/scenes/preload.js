@@ -22,7 +22,25 @@ class PreloadGame extends Phaser.Scene {
       frameHeight: 20,
     });
   }
-  create() {}
+  create() {
+    this.anims.create({
+      key: "run",
+      frames: this.anims.generateFrameNames("dude", { start: 6, end: 9 }),
+      framerate: 10,
+      repeat: -1,
+    });
+    this.anims.create({
+      key: "rotate",
+      frames: this.anims.generateFrameName("coin", {
+        start: 0,
+        end: 7,
+      }),
+      frameRate: 15,
+      yoyo: true,
+      repeat: -1,
+    });
+    this.scenes.start("game");
+  }
   update() {}
 }
 export default Preload;

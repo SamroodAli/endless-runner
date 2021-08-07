@@ -1,6 +1,7 @@
 import Phaser from "phaser";
 import platform from "../assets/platform.png";
 import dude from "../assets/dude.png";
+import coin from "../assets/coin.png";
 import { gameOptions, gameConfig } from "../gameOptions.js";
 
 class PreloadGame extends Phaser.Scene {
@@ -16,7 +17,10 @@ class PreloadGame extends Phaser.Scene {
       frameHeight: 48,
     });
 
-    this.load.spritesheet();
+    this.load.spritesheet("coin", coin, {
+      frameWidth: 20,
+      frameHeight: 20,
+    });
   }
   create() {}
   update() {}

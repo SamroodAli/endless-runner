@@ -8,10 +8,7 @@ class Game extends Phaser.Scene {
   constructor() {
     super("game");
   }
-  preload() {
-    this.load.image("platform", platform);
-    this.load.spritesheet("dude", dude, { frameWidth: 32, frameHeight: 48 });
-  }
+
   create() {
     this.platformGroup = this.add.group({
       // once a platform is removed, it's added to the pool

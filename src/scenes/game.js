@@ -55,7 +55,18 @@ class Game extends Phaser.Scene {
     });
 
     this.player.setGravityY(gameOptions.playerGravity);
-    this.physics.add.collider(this.player, this.platformGroup);
+    this.physics.add.collider(
+      this.player,
+      this.platformGroup,
+      () => {
+        if (!this.player.anims.isPlaying) {
+          this.player.anims.play("run");
+        }
+      },
+      null,
+      this
+    );
+
     this.input.on("pointerdown", this.jump, this);
   }
   update() {
@@ -147,6 +158,20 @@ class Game extends Phaser.Scene {
       this.player.setVelocityY(gameOptions.jumpForce * -1);
       this.playerJumps++;
     }
+  }
+  collectCoin(player, coin) {
+    this.tweens.add({
+      target: coin,
+      y: coin.y - 100,
+      alpha: 0,
+      duration: 800,
+      ease: "Cubic.easeOut",
+      callbackScope: this,
+      onComplete: () => {
+        this.coinGroup.killAndHide(coin);
+        this.coinGroup.remove(coin);
+      },
+    });
   }
 }
 export default Game;

@@ -1,6 +1,4 @@
 import Phaser from "phaser";
-import platform from "../assets/platform.png";
-import dude from "../assets/dude.png";
 import { gameOptions, gameConfig } from "../gameOptions.js";
 
 class Game extends Phaser.Scene {
@@ -88,17 +86,26 @@ class Game extends Phaser.Scene {
         }
       );
       this.physics.pause();
+      var timer = this.time.delayedCall(
+        1000,
+        () => {
+          this.scene.stop();
+          this.scene.start("PreloadGame");
+        },
+        null,
+        this
+      ); // delay in ms
     }
     this.player.x = gameOptions.playerStartPosition;
 
     // recycling platforms
     let minDistance = gameConfig.width; //screen Width
-    let lastPlatformHeight = 0;
+    let rightmostPlatformHeight = 0;
     this.platformGroup.getChildren().forEach((platform) => {
       let platformDistance =
         gameConfig.width - (platform.x + platform.displayWidth / 2); //1050
       minDistance = Math.min(minDistance, platformDistance); // 1050
-      lastPlatformHeight = platform.y;
+      rightmostPlatformHeight = platform.y;
       if (platform.x < -platform.displayWidth / 2) {
         this.platformGroup.killAndHide(platform);
         this.platformGroup.remove(platform);
@@ -113,7 +120,7 @@ class Game extends Phaser.Scene {
       const platformRandomHeight = Phaser.Math.Between(
         ...gameOptions.platformHeightRange
       );
-      const nextPlatformGap = lastPlatformHeight + platformRandomHeight;
+      const nextPlatformGap = rightmostPlatformHeight + platformRandomHeight;
       const minPlatformHeight =
         gameConfig.height * gameOptions.platformVerticalLimit[0];
       const maxPlatformHeight =

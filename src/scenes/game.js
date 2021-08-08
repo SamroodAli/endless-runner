@@ -191,7 +191,7 @@ class Game extends Phaser.Scene {
           coin.visible = true;
           this.coinPool.remove(coin);
         } else {
-          coin = this.physics.add.sprite(posX, posY - 48, "gold1");
+          coin = this.physics.add.sprite(posX, posY - 60, "gold1");
           coin.setImmovable = true;
           coin.setVelocityX(platform.body.velocity.x);
           this.coinGroup.add(coin);

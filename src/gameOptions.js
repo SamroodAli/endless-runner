@@ -1,4 +1,4 @@
-import Preload from "./scenes/preload.js";
+import PreloadGame from "./scenes/preload.js";
 import Game from "./scenes/game.js";
 
 export const gameOptions = {
@@ -15,11 +15,11 @@ export const gameOptions = {
   coinPercent: 25,
 };
 
-export let gameConfig = {
+export const gameConfig = {
   type: Phaser.AUTO,
   width: screen.availWidth * 0.9,
   height: screen.availHeight * 0.8,
-  scene: [Preload, Game],
+  scene: [PreloadGame, Game],
   backgroundColor: "#4488aa",
 
   physics: {

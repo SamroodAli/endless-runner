@@ -6,7 +6,7 @@ import { gameOptions, gameConfig } from "../gameOptions.js";
 class Game extends Phaser.Scene {
   platformPool;
   constructor() {
-    super("game");
+    super("Game");
   }
 
   create() {
@@ -35,26 +35,15 @@ class Game extends Phaser.Scene {
     this.addPlatform(
       gameConfig.width,
       gameConfig.width / 2,
-      gameConfig.height * gameOptions.platformVerticalLimit[0]
+      gameConfig.height * gameOptions.platformVerticalLimit[1]
     );
     this.player = this.physics.add.sprite(
       gameOptions.playerStartPosition,
       gameConfig.height / 2,
       "dude"
     );
-    this.anims.create({
-      key: "run",
-      frames: this.anims.generateFrameNames("dude", { start: 6, end: 9 }),
-      framerate: 10,
-      repeat: -1,
-    });
-    this.anims.create({
-      key: "turn",
-      frames: [{ key: "dude", frame: 6 }],
-      frameRate: 20,
-    });
-
     this.player.setGravityY(gameOptions.playerGravity);
+
     this.physics.add.collider(
       this.player,
       this.platformGroup,
@@ -66,13 +55,20 @@ class Game extends Phaser.Scene {
       null,
       this
     );
-    this.physics.add.collider(
+    this.physics.add.overlap(
       this.player,
       this.coinGroup,
       this.collectCoin,
       null,
       this
     );
+
+    this.anims.create({
+      key: "turn",
+      frames: [{ key: "dude", frame: 6 }],
+      frameRate: 20,
+    });
+
     this.input.on("pointerdown", this.jump, this);
   }
   update() {

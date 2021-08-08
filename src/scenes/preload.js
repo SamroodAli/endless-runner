@@ -2,18 +2,17 @@ import Phaser from "phaser";
 import platform from "../assets/platform.png";
 import dude from "../assets/dude.png";
 import coin from "../assets/coin.png";
-import { gameOptions, gameConfig } from "../gameOptions.js";
 
 class PreloadGame extends Phaser.Scene {
   platformPool;
   constructor() {
-    super("preloadGame");
+    super("PreloadGame");
   }
   preload() {
     this.load.image("platform", platform);
 
     this.load.spritesheet("dude", dude, {
-      frameWidth: 24,
+      frameWidth: 32,
       frameHeight: 48,
     });
 
@@ -25,13 +24,13 @@ class PreloadGame extends Phaser.Scene {
   create() {
     this.anims.create({
       key: "run",
-      frames: this.anims.generateFrameNames("dude", { start: 6, end: 9 }),
-      framerate: 10,
+      frames: this.anims.generateFrameNames("dude", { start: 6, end: 8 }),
+      framerate: 8,
       repeat: -1,
     });
     this.anims.create({
       key: "rotate",
-      frames: this.anims.generateFrameName("coin", {
+      frames: this.anims.generateFrameNames("coin", {
         start: 0,
         end: 7,
       }),
@@ -39,8 +38,8 @@ class PreloadGame extends Phaser.Scene {
       yoyo: true,
       repeat: -1,
     });
-    this.scenes.start("game");
+    this.scene.start("Game");
   }
   update() {}
 }
-export default Preload;
+export default PreloadGame;

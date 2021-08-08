@@ -156,6 +156,26 @@ class Game extends Phaser.Scene {
       this.platformGroup.add(platform);
     }
     this.nextPlatformDistance = Phaser.Math.Between(...gameOptions.spawnRange);
+    // Adding coin over platform
+    if (this.addedPlatforms > 1) {
+      if (Phaser.Math.Between(1, 100) <= gameOptions.coinPercent) {
+        if (this.coinPool.getLength()) {
+          let coin = this.coinPool.getFirst();
+          coin.x = posX;
+          coin.y = posY - 96;
+          coin.alpha = 1;
+          coin.active = true;
+          coin.visible = true;
+          this.coinPool.remove(coin);
+        } else {
+          let coin = this.physics.add.sprite(posX, posY - 96, "coin");
+          coin.setImmovable = true;
+          coin.setVelocityX(platform.body.velocity.x);
+          coin.anims.play("rotate");
+          this.coinGroup.add(coin);
+        }
+      }
+    }
   }
   jump() {
     if (this.playerJumps < gameOptions.jumps) {

@@ -75,7 +75,7 @@ class Game extends Phaser.Scene {
   }
   update() {
     // game over
-    if (this.player.body.y > gameConfig.height) {
+    if (this.player.y > gameConfig.height) {
       this.add.text(
         gameConfig.width / 2.5,
         gameConfig.height / 4,
@@ -99,14 +99,15 @@ class Game extends Phaser.Scene {
     }
     this.player.x = gameOptions.playerStartPosition;
     let minDistance = gameConfig.width;
-    let rightmostPlatformHeight = 0;
+    let rightmostPlatformHeightFromBottom = 0;
+
     this.platformGroup.getChildren().forEach((platform) => {
       let platformDistance =
         gameConfig.width - (platform.x + platform.displayWidth / 2);
 
       if (platformDistance < minDistance) {
         minDistance = platformDistance;
-        rightmostPlatformHeight = platform.y;
+        rightmostPlatformHeightFromBottom = platform.y;
       }
 
       if (platform.x < -platform.displayWidth / 2) {
@@ -121,6 +122,31 @@ class Game extends Phaser.Scene {
         this.coinGroup.remove(coin);
       }
     });
+
+    if (minDistance > this.nextPlatformDistance) {
+      let nextPlatformWidth = Phaser.Math.Between(
+        ...gameOptions.platformSizeRange
+      );
+      let platformRandomHeight =
+        gameOptions.platformHeightScale *
+        Phaser.Math.Between(...gameOptions.platformSizeRange);
+      let nextPlatformGap =
+        rightmostPlatformHeightFromBottom + platformRandomHeight;
+      let minPlatformHeight =
+        gameConfig.height * gameOptions.platformVerticalLimit[0];
+      let maxPlatformHeight =
+        gameConfig.height * gameOptions.platformVerticalLimit[1];
+      let nextPlatformHeight = Phaser.Math.Clamp(
+        nextPlatformGap,
+        minPlatformHeight,
+        maxPlatformHeight
+      );
+      this.addPlatform(
+        nextPlatformWidth,
+        gameConfig.width + nextPlatformWidth / 2,
+        nextPlatformHeight
+      );
+    }
 
     if (this.player.body.touching.down) {
       this.player.anims.play("run", true);
@@ -155,8 +181,9 @@ class Game extends Phaser.Scene {
     // Adding coin over platform
     if (this.addedPlatforms > 1) {
       if (Phaser.Math.Between(1, 100) <= gameOptions.coinPercent) {
+        let coin;
         if (this.coinPool.getLength()) {
-          let coin = this.coinPool.getFirst();
+          coin = this.coinPool.getFirst();
           coin.x = posX;
           coin.y = posY - 96;
           coin.alpha = 1;
@@ -164,11 +191,13 @@ class Game extends Phaser.Scene {
           coin.visible = true;
           this.coinPool.remove(coin);
         } else {
-          let coin = this.physics.add.sprite(posX, posY - 96, "coin");
+          coin = this.physics.add.sprite(posX, posY - 48, "gold1");
           coin.setImmovable = true;
           coin.setVelocityX(platform.body.velocity.x);
           this.coinGroup.add(coin);
         }
+        coin.setScale(0.5);
+        coin.anims.play("rotate");
       }
     }
   }

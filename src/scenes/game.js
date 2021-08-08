@@ -70,11 +70,12 @@ class Game extends Phaser.Scene {
       frameRate: 20,
     });
 
+    this.input.keyboard.on("keydown-SPACE", this.jump, this);
     this.input.on("pointerdown", this.jump, this);
   }
   update() {
     // game over
-    if (this.player.y > gameConfig.height) {
+    if (this.player.body.y > gameConfig.height) {
       this.add.text(
         gameConfig.width / 2.5,
         gameConfig.height / 4,
@@ -97,45 +98,30 @@ class Game extends Phaser.Scene {
       ); // delay in ms
     }
     this.player.x = gameOptions.playerStartPosition;
-
-    // recycling platforms
-    let minDistance = gameConfig.width; //screen Width
+    let minDistance = gameConfig.width;
     let rightmostPlatformHeight = 0;
     this.platformGroup.getChildren().forEach((platform) => {
       let platformDistance =
-        gameConfig.width - (platform.x + platform.displayWidth / 2); //1050
-      minDistance = Math.min(minDistance, platformDistance); // 1050
-      rightmostPlatformHeight = platform.y;
+        gameConfig.width - (platform.x + platform.displayWidth / 2);
+
+      if (platformDistance < minDistance) {
+        minDistance = platformDistance;
+        rightmostPlatformHeight = platform.y;
+      }
+
       if (platform.x < -platform.displayWidth / 2) {
         this.platformGroup.killAndHide(platform);
         this.platformGroup.remove(platform);
       }
     }, this);
-    // adding new platforms
-    if (minDistance > this.nextPlatformDistance) {
-      const nextPlatformWidth = Phaser.Math.Between(
-        gameOptions.platformSizeRange[0],
-        gameOptions.platformSizeRange[1]
-      );
-      const platformRandomHeight = Phaser.Math.Between(
-        ...gameOptions.platformHeightRange
-      );
-      const nextPlatformGap = rightmostPlatformHeight + platformRandomHeight;
-      const minPlatformHeight =
-        gameConfig.height * gameOptions.platformVerticalLimit[0];
-      const maxPlatformHeight =
-        gameConfig.height * gameOptions.platformVerticalLimit[1];
-      const nextPlatformHeight = Phaser.Math.Clamp(
-        nextPlatformGap,
-        minPlatformHeight,
-        maxPlatformHeight
-      );
-      this.addPlatform(
-        nextPlatformWidth,
-        gameConfig.width + nextPlatformWidth / 2,
-        nextPlatformHeight
-      );
-    }
+
+    this.coinGroup.getChildren().forEach((coin) => {
+      if (coin.x < coin.displayWidth / 2) {
+        this.coinGroup.killAndHide(coin);
+        this.coinGroup.remove(coin);
+      }
+    });
+
     if (this.player.body.touching.down) {
       this.player.anims.play("run", true);
       this.playerJumps = 0;

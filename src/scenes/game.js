@@ -58,7 +58,10 @@ class Game extends Phaser.Scene {
     this.physics.add.overlap(
       this.player,
       this.coinGroup,
-      this.collectCoin,
+      function (player, coin) {
+        this.coinGroup.killAndHide(coin);
+        this.coinGroup.remove(coin);
+      },
       null,
       this
     );
@@ -171,7 +174,6 @@ class Game extends Phaser.Scene {
           let coin = this.physics.add.sprite(posX, posY - 96, "coin");
           coin.setImmovable = true;
           coin.setVelocityX(platform.body.velocity.x);
-          coin.anims.play("rotate");
           this.coinGroup.add(coin);
         }
       }
@@ -182,20 +184,6 @@ class Game extends Phaser.Scene {
       this.player.setVelocityY(gameOptions.jumpForce * -1);
       this.playerJumps++;
     }
-  }
-  collectCoin(player, coin) {
-    this.tweens.add({
-      target: coin,
-      y: coin.y - 100,
-      alpha: 0,
-      duration: 800,
-      ease: "Cubic.easeOut",
-      callbackScope: this,
-      onComplete: () => {
-        this.coinGroup.killAndHide(coin);
-        this.coinGroup.remove(coin);
-      },
-    });
   }
 }
 export default Game;

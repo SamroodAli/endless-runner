@@ -135,6 +135,7 @@ class Game extends Phaser.Scene {
   }
 
   addPlatform(platformWidth, posX, posY) {
+    this.addedPlatforms += 1;
     //add from the pool if available or else create a platform and add it to the group
     let platform;
     if (this.platformPool.getLength()) {
@@ -144,15 +145,16 @@ class Game extends Phaser.Scene {
       platform.active = true;
       platform.visible = true;
       this.platformPool.remove(platform);
+      platform.displayWidth = platformWidth;
     } else {
-      platform = this.physics.add.image(posX, posY, "platform");
-      platform.setImmovable(true);
-      platform.setVelocityX(
+      platform = this.add.tileSprite(posX, posY, platformWidth, 32, "platform");
+      this.physics.add.existing(platform);
+      platform.body.setImmovable(true);
+      platform.body.setVelocityX(
         Phaser.Math.Between(...gameOptions.platformSpeedRange) * -1
       );
       this.platformGroup.add(platform);
     }
-    platform.displayWidth = platformWidth;
     this.nextPlatformDistance = Phaser.Math.Between(...gameOptions.spawnRange);
   }
   jump() {

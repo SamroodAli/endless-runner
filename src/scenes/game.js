@@ -40,6 +40,8 @@ class Game extends Phaser.Scene {
       removeCallback: (fire) => this.fireGroup.add(fire),
     });
 
+    this.dying = false;
+
     this.addMountains();
 
     this.playerJumps = 0;
@@ -56,7 +58,7 @@ class Game extends Phaser.Scene {
     this.player.setDepth(2);
     this.player.setGravityY(gameOptions.playerGravity);
 
-    this.physics.add.collider(
+    this.platformCollider = this.physics.add.collider(
       this.player,
       this.platformGroup,
       () => {
@@ -73,6 +75,20 @@ class Game extends Phaser.Scene {
       function (player, coin) {
         this.coinGroup.killAndHide(coin);
         this.coinGroup.remove(coin);
+      },
+      null,
+      this
+    );
+
+    this.physics.add.overlap(
+      this.player,
+      this.fireGroup,
+      (player, fire) => {
+        this.dying = true;
+        this.player.anims.stop();
+        this.player.setFrame(3);
+        this.player.body.setVelocityY(-200);
+        this.physics.world.removeCollider(this.platformCollider);
       },
       null,
       this
@@ -227,6 +243,28 @@ class Game extends Phaser.Scene {
         coin.setScale(0.5);
         coin.setDepth(2);
         coin.anims.play("rotate");
+      }
+    }
+    if (Phaser.Math.Between(0, 1) < gameOptions.firePercent) {
+      const startPlatform = posX - platformWidth / 2;
+      const fireX = startPlatform + Phaser.Math.Between(1, platformWidth);
+      const fireY = posY - 4;
+      if (this.firePool.getLength()) {
+        let fire = this.firePool.getFirst();
+        fire.x = fireX;
+        fire.y = fireY;
+        fire.alpha = 1;
+        fire.active = true;
+        fire.visible = true;
+        this.firePool.remove(fire);
+      } else {
+        let fire = this.physics.add.sprite(fireX, fireY, "fire");
+        fire.setImmovable(true);
+        fire.setVelocity = platform.body.velocity.x;
+        fire.setSize(8, 2);
+        fire.anims.play("burn");
+        fire.setDepth(2);
+        this.fireGroup.add(fire);
       }
     }
   }

@@ -32,6 +32,12 @@ class Game extends Phaser.Scene {
       removeCallback: (coin) => this.coinGroup.add(coin),
     });
 
+    this.fireGroup = this.add.group({
+      removeCallback: (fire) => {
+        this.firePool.add(fire);
+      },
+    });
+
     this.addMountains();
 
     this.playerJumps = 0;

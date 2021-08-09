@@ -8,9 +8,10 @@ class Game extends Phaser.Scene {
   }
 
   create() {
+    this.mountainGroup = this.add.group();
+
     this.addedPlatforms = 0;
     this.platformGroup = this.add.group({
-      // once a platform is removed, it's added to the pool
       removeCallback: (platform) => {
         this.platformPool.add(platform);
       },
@@ -18,7 +19,6 @@ class Game extends Phaser.Scene {
 
     // pool
     this.platformPool = this.add.group({
-      // once a platform is removed from the pool, it's added to the active platforms group
       removeCallback: (platform) => {
         this.platformGroup.add(platform);
       },
@@ -91,7 +91,7 @@ class Game extends Phaser.Scene {
         }
       );
       this.physics.pause();
-      var timer = this.time.delayedCall(
+      this.time.delayedCall(
         1000,
         () => {
           this.scene.stop();

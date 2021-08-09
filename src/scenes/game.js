@@ -45,6 +45,7 @@ class Game extends Phaser.Scene {
       gameConfig.height / 2,
       "dude"
     );
+    this.player.setDepth(2);
     this.player.setGravityY(gameOptions.playerGravity);
 
     this.physics.add.collider(
@@ -154,6 +155,18 @@ class Game extends Phaser.Scene {
       );
     }
 
+    this.mountainGroup.getChildren().forEach((mountain) => {
+      if (mountain.x < -mountain.displayWidth) {
+        let rightMostMountain = this.getRightMostMountain();
+        mountain.x = rightMostMountain + Phaser.Math.Between(100, 350);
+        mountain.y = gameConfig.height * Phaser.Math.Between(0, 100);
+        mountain.setFrame(Phaser.Math.Between(0, 3));
+        if (Phaser.Math.Between(0, 1)) {
+          mountain.setDepth(1);
+        }
+      }
+    }, this);
+
     if (this.player.body.touching.down) {
       this.player.anims.play("run", true);
       this.playerJumps = 0;
@@ -182,6 +195,7 @@ class Game extends Phaser.Scene {
         Phaser.Math.Between(...gameOptions.platformSpeedRange) * -1
       );
       this.platformGroup.add(platform);
+      platform.setDepth(2);
     }
     this.nextPlatformDistance = Phaser.Math.Between(...gameOptions.spawnRange);
     // Adding coin over platform
@@ -203,6 +217,7 @@ class Game extends Phaser.Scene {
           this.coinGroup.add(coin);
         }
         coin.setScale(0.5);
+        coin.setDepth(2);
         coin.anims.play("rotate");
       }
     }
@@ -210,14 +225,29 @@ class Game extends Phaser.Scene {
 
   addMountains() {
     let rightMostMountain = this.getRightMostMountain();
+    if (rightMostMountain < gameConfig.width * 2) {
+      let mountain = this.physics.add.sprite(
+        rightMostMountain + Phaser.Math.Between(100, 350),
+        gameConfig.height + Phaser.Math.Between(0, 100),
+        "mountain"
+      );
+      mountain.setOrigin(0.5, 1);
+      mountain.body.setVelocityX(gameOptions.mountainSpeed * -1);
+      this.mountainGroup.add(mountain);
+      if (Phaser.Math.Between(0, 1)) {
+        mountain.setDepth(1);
+      }
+      mountain.setFrame(Phaser.Math.Between(0, 3));
+      this.addMountains();
+    }
   }
 
   getRightMostMountain() {
     let rightMostMountain = -200;
     this.mountainGroup.getChildren().forEach((mountain) => {
       rightMostMountain = Math.max(rightMostMountain, mountain.x);
-      return rightMostMountain;
     });
+    return rightMostMountain;
   }
 
   jump() {

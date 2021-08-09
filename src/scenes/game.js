@@ -23,12 +23,15 @@ class Game extends Phaser.Scene {
         this.platformGroup.add(platform);
       },
     });
+
     this.coinGroup = this.add.group({
       removeCallback: (coin) => this.coinPool.add(coin),
     });
+
     this.coinPool = this.add.group({
       removeCallback: (coin) => this.coinGroup.add(coin),
     });
+
     this.playerJumps = 0;
     this.addPlatform(
       gameConfig.width,
@@ -73,6 +76,7 @@ class Game extends Phaser.Scene {
     this.input.keyboard.on("keydown-SPACE", this.jump, this);
     this.input.on("pointerdown", this.jump, this);
   }
+
   update() {
     // game over
     if (this.player.y > gameConfig.height) {
@@ -201,6 +205,7 @@ class Game extends Phaser.Scene {
       }
     }
   }
+
   jump() {
     if (this.playerJumps < gameOptions.jumps) {
       this.player.setVelocityY(gameOptions.jumpForce * -1);
@@ -208,4 +213,5 @@ class Game extends Phaser.Scene {
     }
   }
 }
+
 export default Game;

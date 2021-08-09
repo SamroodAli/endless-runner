@@ -3,6 +3,7 @@ import Game from "./scenes/game.js";
 
 export const gameOptions = {
   platformSpeedRange: [300, 400],
+  mountainSpeed: 80,
   spawnRange: [80, 300],
   platformSizeRange: [90, 300],
   platformHeightRange: [-5, 5],

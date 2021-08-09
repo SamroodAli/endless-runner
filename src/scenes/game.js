@@ -32,6 +32,8 @@ class Game extends Phaser.Scene {
       removeCallback: (coin) => this.coinGroup.add(coin),
     });
 
+    this.addMountains();
+
     this.playerJumps = 0;
     this.addPlatform(
       gameConfig.width,
@@ -204,6 +206,18 @@ class Game extends Phaser.Scene {
         coin.anims.play("rotate");
       }
     }
+  }
+
+  addMountains() {
+    let rightMostMountain = this.getRightMostMountain();
+  }
+
+  getRightMostMountain() {
+    let rightMostMountain = -200;
+    this.mountainGroup.getChildren().forEach((mountain) => {
+      rightMostMountain = Math.max(rightMostMountain, mountain.x);
+      return rightMostMountain;
+    });
   }
 
   jump() {

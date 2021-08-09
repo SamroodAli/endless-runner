@@ -70,6 +70,14 @@ class PreloadGame extends Phaser.Scene {
       yoyo: true,
       repeat: -1,
     });
+
+    this.anims.create({
+      key: "burn",
+      frames: this.anims.generateFrameNumbers("fire", { start: 0, end: 4 }),
+      frameRate: 15,
+      repeat: -1,
+    });
+
     this.scene.start("Game");
   }
   update() {}

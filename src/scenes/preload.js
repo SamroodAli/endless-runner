@@ -6,6 +6,7 @@ import gold1 from "../assets/gold_1.png";
 import gold2 from "../assets/gold_2.png";
 import gold3 from "../assets/gold_3.png";
 import gold4 from "../assets/gold_4.png";
+import mountain from "../assets/mountain.png";
 
 class PreloadGame extends Phaser.Scene {
   platformPool;
@@ -39,6 +40,10 @@ class PreloadGame extends Phaser.Scene {
     this.load.spritesheet("gold4", gold4, {
       frameWidth: 100,
       frameHeight: 20,
+    });
+    this.load.spritesheet("mountain", mountain, {
+      frameWidth: 512,
+      frameHeight: 512,
     });
   }
   create() {

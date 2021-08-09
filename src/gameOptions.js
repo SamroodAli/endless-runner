@@ -14,6 +14,7 @@ export const gameOptions = {
   playerStartPosition: 200,
   jumps: 2,
   coinPercent: 25,
+  firePercent: 25,
 };
 
 export const gameConfig = {

@@ -7,7 +7,7 @@ export const gameOptions = {
   spawnRange: [80, 300],
   platformSizeRange: [90, 300],
   platformHeightRange: [-5, 5],
-  platformHeightScale: 20,
+  platformHeightScale: 10,
   platformVerticalLimit: [0.4, 0.7],
   playerGravity: 900,
   jumpForce: 400,

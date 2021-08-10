@@ -153,6 +153,12 @@ class Game extends Phaser.Scene {
         this.coinGroup.remove(coin);
       }
     });
+    this.fireGroup.getChildren().forEach((fire) => {
+      if (fire.x < fire.displayWidth / 2) {
+        this.fireGroup.killAndHide(fire);
+        this.fireGroup.remove(fire);
+      }
+    });
 
     if (minDistance > this.nextPlatformDistance) {
       let nextPlatformWidth = Phaser.Math.Between(
@@ -160,7 +166,7 @@ class Game extends Phaser.Scene {
       );
       let platformRandomHeight =
         gameOptions.platformHeightScale *
-        Phaser.Math.Between(...gameOptions.platformSizeRange);
+        Phaser.Math.Between(...gameOptions.platformHeightRange);
       let nextPlatformGap =
         rightmostPlatformHeightFromBottom + platformRandomHeight;
       let minPlatformHeight =
@@ -245,10 +251,10 @@ class Game extends Phaser.Scene {
         coin.anims.play("rotate");
       }
     }
-    if (Phaser.Math.Between(0, 1) < gameOptions.firePercent) {
+    if (Phaser.Math.Between(0, 100) < gameOptions.firePercent) {
       const startPlatform = posX - platformWidth / 2;
       const fireX = startPlatform + Phaser.Math.Between(1, platformWidth);
-      const fireY = posY - 4;
+      const fireY = posY - 46;
       if (this.firePool.getLength()) {
         let fire = this.firePool.getFirst();
         fire.x = fireX;
@@ -258,10 +264,10 @@ class Game extends Phaser.Scene {
         fire.visible = true;
         this.firePool.remove(fire);
       } else {
-        let fire = this.physics.add.sprite(fireX, fireY, "fire");
+        let fire = this.physics.add.sprite(fireX, fireY, "fire").setScale(0.75);
         fire.setImmovable(true);
-        fire.setVelocity = platform.body.velocity.x;
-        fire.setSize(8, 2);
+        fire.setVelocityX(platform.body.velocity.x);
+        fire.setSize(8, 2, true);
         fire.anims.play("burn");
         fire.setDepth(2);
         this.fireGroup.add(fire);
@@ -297,7 +303,7 @@ class Game extends Phaser.Scene {
   }
 
   jump() {
-    if (this.playerJumps < gameOptions.jumps) {
+    if (!this.dying && this.playerJumps < gameOptions.jumps) {
       this.player.setVelocityY(gameOptions.jumpForce * -1);
       this.playerJumps++;
     }
